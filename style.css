@@ -30,6 +30,10 @@ body {
     font-weight: lighter;
     color: #666;
     margin-top: 5px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    
   }
   .card-image {
     height: 180px;
