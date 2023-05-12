@@ -7,16 +7,19 @@ const sectionTitle = document.querySelector(".section-title");
 // render pokemons
 let pokemoms = [];
 const favorites = [];
-let totalPoints = 0
-let icon  
+let totalPoints = 0;
+let icon;
 
 
-const makeCard = (array, html) =>{
-    array.forEach((element) => {
+const makeCard = (array, html) => {
+
+
+  array.forEach((element) => {
     html.innerHTML += `
     <li class= "card">
+    <div class="${element.type} borderStyle">
     <div class="card-title favoriteIcon" id="${element.id}">
-    <div class="cp">CP ${element.points}</div>
+    <div class="cp"># ${element.points}</div>
      ${icon} 
     </div>
   
@@ -29,28 +32,32 @@ const makeCard = (array, html) =>{
     <div class="card-subtitle">
         <div class="subtitle"><span class="bold-subtitle">Move</span>: ${element.move} </div>
      </div>
-    
+     </div>
     </li>
     
     `;
-  
+
     
   });
 
-  const favoritesBtn = document.querySelectorAll(".favoriteIcon")
+  const favoritesBtn = document.querySelectorAll(".favoriteIcon");
   for (const button of favoritesBtn) {
     button.addEventListener("click", handleFavorites);
-
-} }
-
-const renderPokemons = () => {
-  ol.innerHTML = "";
-  icon = `<span class="material-symbols-outlined favorite">star</span>`
- makeCard(pokemoms, ol)
-
+  }
 
 };
 
+const renderPokemons = () => {
+    ol.innerHTML = "";
+    icon = `<span class="material-symbols-outlined favorite">favorite</span>`;
+  
+    for (const pokemom of pokemoms) {
+    pokemom.checked= false
+    
+  }
+
+  makeCard(pokemoms, ol);
+};
 
 //Search pokemons
 const handleSearch = (event) => {
@@ -62,64 +69,65 @@ const handleSearch = (event) => {
     (element) => element.name.toUpperCase() == value
   );
   searchPokemon.push(findPokemon);
-  makeCard(searchPokemon);
+  ol.innerHTML = "";
+  makeCard(searchPokemon, ol);
 };
 
 searchButton.addEventListener("click", handleSearch);
 
-
-
 //Favoritar pokemons
 const handleFavorites = (event) => {
-  let id = event.target.parentNode.id
-  
-  const pokemonIndex = favorites.findIndex((element) => element.id == id)
+  let id = event.target.parentNode.id;
+
+  const pokemonIndex = favorites.findIndex((element) => element.id == id);
   const findFivorites = pokemoms.find((element) => element.id == id);
-  
 
   if (!favorites.includes(findFivorites)) {
     favorites.push(findFivorites);
-    icon =`<span class="material-symbols-outlined favorited">delete</span>`
-    const calcTotalPoints = favorites.reduce((sum, element) => (sum += element.points), 0)
-    totalPoints = calcTotalPoints
+    icon = `<span class="material-symbols-outlined favorited">delete</span>`;
+    const calcTotalPoints = favorites.reduce(
+      (sum, element) => (sum += element.points),
+      0
+    );
+    findFivorites.checked = true
+    
+    totalPoints = calcTotalPoints;
     renderFavorites();
-     
-  }  else if(favorites.includes(findFivorites)){
-    favorites.splice(pokemonIndex, 1)
-    const calcTotalPoints = favorites.reduce((sum, element) => (sum += element.points), 0)
-    totalPoints = calcTotalPoints
+  } else if (favorites.includes(findFivorites)) {
+    favorites.splice(pokemonIndex, 1);
+    const calcTotalPoints = favorites.reduce(
+      (sum, element) => (sum += element.points),
+      0
+    );
+    totalPoints = calcTotalPoints;
     renderFavorites();
   }
- 
- 
+
+  console.log(favorites)
 };
 
 const renderFavorites = () => {
- sectionTitle.innerHTML = `
+  sectionTitle.innerHTML = `
   <h1>Favorites</h1>
   <a href="#top-page" class="anchorLink"><h3>Go to <span class="tached">Search</span></h3></a>
   <h2>Total Combat Power of your favorite pokemons: ${totalPoints} </h2>
   `;
 
   section.innerHTML = "";
-  makeCard(favorites, section)
-
-  }
-
-
+  makeCard(favorites, section);
+};
 
 //Get Api
 const getApi = async () => {
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 1; i <= 50; i++) {
     const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
     const response = await fetch(url);
     const respJson = await response.json();
     pokemoms.push(respJson);
-    
   }
-  console.log(pokemoms)
+
   pokemoms = mapArray(pokemoms);
-  console.log(pokemoms);
+  console.log(pokemoms)
   renderPokemons(pokemoms);
 };
 

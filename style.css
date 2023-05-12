@@ -39,6 +39,7 @@ body {
     
     border: #f4f4f4 2px solid;
   }
+
   .card {
     list-style: none;
     padding: 20px;
@@ -46,7 +47,9 @@ body {
     color: #222;
     text-align: center;
     border-radius: 5px;
+    padding: 5px
   }
+
   .card-title {
     text-transform: uppercase;
     font-size: 20px;
@@ -59,7 +62,7 @@ body {
     position: relative;
     right: -60px;
     top: -25px;
-    color:#3B9AF7;
+    color:#cc0a0a;
   }
 
   .cp{
@@ -67,6 +70,8 @@ body {
     top: 0px;
     right: 0px;
   }
+
+
 
   .favorited{
     position: relative;
@@ -127,3 +132,66 @@ body {
       transform: translateY(-0px);
     }
   }
+
+  .borderStyle{
+    padding: 15px;
+    border-radius: 5px;
+
+  }
+
+  .grass{
+    border: 2px green solid;
+   
+  }
+
+  .ground{
+    border: 2px solid rgb(141, 131, 131);
+  }
+  
+  .water, .ice{
+    border:2px solid rgb(23, 181, 202);
+  
+  }
+  .fire{
+    border: 2px solid rgb(255, 0, 0);
+  
+  }
+
+  .bug {
+    border: 2px solid rgb(140, 0, 255);
+   
+  }
+
+  .fighting  {
+    border: 2px solid rgb(226, 205, 15);
+  }
+
+  .poison  {
+    border: 2px solid rgb(15, 226, 156);
+    
+  }
+
+  .electric   {
+    border: 2px solid rgb(114, 97, 19);
+    
+  }
+
+  .normal{
+    border: 2px solid rgb(75, 57, 10);
+  }
+  .fairy{
+    border: 2px solid rgb(165, 21, 158);
+  }
+
+  .rock{
+    border: 2px solid rgb(114, 10, 10);
+  }
+
+  .psychic{
+    border: 2px solid rgb(23, 55, 124);
+  }
+
+  .dragon{
+    border: 2px solid rgb(124, 14, 87);
+  }
+
