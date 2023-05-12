@@ -1,10 +1,13 @@
 const ol = document.querySelector("#pokedex");
-const li = document.querySelector("li");
-const searchInput = document.querySelector("input")
-const searchButton = document.querySelector("#searchBtn")
-const favoriteBtn = document.querySelectorAll(".favorite")
+const searchInput = document.querySelector("input");
+const searchButton = document.querySelector("#searchBtn");
+const section = document.querySelector(".favorites-section");
+const sectionTitle = document.querySelector(".section-title");
 
+
+// render pokemons
 let pokemoms = [];
+const favorites = [];
 
 const renderPokemons = (array) => {
   ol.innerHTML = "";
@@ -13,7 +16,7 @@ const renderPokemons = (array) => {
     ol.innerHTML += `
     <li class= "card">
     <div class="card-title">${element.name} </div>
-    <div><span class="material-symbols-outlined favorite">
+    <div class="btn-favorite"><span class="material-symbols-outlined favorite" id="${element.id}">
     star
     </span></div>
     <img class="card-image" src="${element.image}">
@@ -26,34 +29,82 @@ const renderPokemons = (array) => {
      </div>
     
     </li>
+
     
     `;
   });
+
+  const favoritesBtn = document.querySelectorAll(".favorite");
+
+  for (const button of favoritesBtn) {
+    button.addEventListener("click", handleFavorites);
+  }
 };
 
+//Search pokemons
 
-const handleSearch =(event)=>{
+const handleSearch = (event) => {
   event.preventDefault();
-  let value = (searchInput.value).toUpperCase()
-  let searchPokemon = []
+  let value = searchInput.value.toUpperCase();
+  let searchPokemon = [];
 
-  const findPokemon = pokemoms.find((element) => (element.name).toUpperCase() == value)
-  searchPokemon.push(findPokemon)
+  const findPokemon = pokemoms.find(
+    (element) => element.name.toUpperCase() == value
+  );
+  searchPokemon.push(findPokemon);
+  renderPokemons(searchPokemon);
+};
 
-  renderPokemons(searchPokemon) 
+searchButton.addEventListener("click", handleSearch);
+
+//Favoritar pokemons
+const handleFavorites = (event) => {
+  let id = event.target.id;
+
+  const findFivorites = pokemoms.find((element) => element.id == id);
+
+  if (!favorites.includes(findFivorites)) {
+    favorites.push(findFivorites);
+  }
+  renderFavotites(favorites)
+};
+
+const renderFavotites = (array) =>{
+  sectionTitle.innerHTML = `<h1>Favorites</h1>`
+  
+  array.forEach((element) => {
+    section.innerHTML += `
+    <li class= "card">
+    <div class="card-title">${element.name} </div>
+    <div class="btn-favorite"><span class="material-symbols-outlined favorite" id="${element.id}">
+    star
+    </span></div>
+    <img class="card-image" src="${element.image}">
+    <div class="card-subtitle">
+        <div class="subtitle"><span class="bold-subtitle">Tipo</span>: ${element.type}</div>
+        <div class="subtitle"><span class="bold-subtitle">Points</span>: ${element.puntos}</div>
+    </div>
+    <div class="card-subtitle">
+        <div class="subtitle"><span class="bold-subtitle">Move</span>: ${element.move} </div>
+     </div>
+    
+    </li>
+
+    
+    `;
+  });
 
 }
 
-searchButton.addEventListener("click", handleSearch)
-
+//Get Api
 const getApi = async () => {
-  for (let i = 1; i <= 50; i++) {
+  for (let i = 1; i <= 10; i++) {
     const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
     const response = await fetch(url);
     const respJson = await response.json();
     pokemoms.push(respJson);
   }
-  
+
   pokemoms = mapArray(pokemoms);
   console.log(pokemoms);
   renderPokemons(pokemoms);
@@ -75,7 +126,6 @@ const mapArray = (array) => {
 
 const getResponse = async () => {
   await getApi();
- 
 };
 
 getResponse();
