@@ -1,8 +1,10 @@
 const ol = document.querySelector("#pokedex");
-const searchInput = document.querySelector("input");
+const searchInput = document.querySelector("#searchInput");
 const searchButton = document.querySelector("#searchBtn");
 const section = document.querySelector(".favorites-section");
 const sectionTitle = document.querySelector(".section-title");
+const cestaFavorites = document.querySelector("h4")
+
 
 // render pokemons
 let pokemoms = [];
@@ -12,7 +14,7 @@ let icon;
 
 
 const makeCard = (array, html) => {
-
+  html.innerHTML = "";
 
   array.forEach((element) => {
     html.innerHTML += `
@@ -20,7 +22,7 @@ const makeCard = (array, html) => {
     <div class="${element.type} borderStyle">
     <div class="card-title favoriteIcon" id="${element.id}">
     <div class="cp"># ${element.points}</div>
-     ${icon} 
+    <span class="material-symbols-outlined favorite">${element.checked ? "verified" : "favorite"}</span>
     </div>
   
     <img class="card-image" src="${element.image}">
@@ -47,60 +49,59 @@ const makeCard = (array, html) => {
 
 };
 
-const renderPokemons = () => {
-    ol.innerHTML = "";
-    icon = `<span class="material-symbols-outlined favorite">favorite</span>`;
-  
-    for (const pokemom of pokemoms) {
-    pokemom.checked= false
-    
-  }
-
-  makeCard(pokemoms, ol);
-};
 
 //Search pokemons
-const handleSearch = (event) => {
-  event.preventDefault();
-  let value = searchInput.value.toUpperCase();
-  let searchPokemon = [];
+const handleSearch = ((pokemoms, value) =>{
+  const filterPokemoms = pokemoms.filter((pokemoms)=>{
+    return pokemoms.name.toUpperCase().includes(value.toUpperCase())
+  })
+  makeCard(filterPokemoms, ol)
+})
 
-  const findPokemon = pokemoms.find(
-    (element) => element.name.toUpperCase() == value
-  );
-  searchPokemon.push(findPokemon);
-  ol.innerHTML = "";
-  makeCard(searchPokemon, ol);
-};
 
-searchButton.addEventListener("click", handleSearch);
+const listenerInput = (pokemoms) =>{
+  searchInput.addEventListener("input", () => handleSearch(pokemoms, searchInput.value));
+  
+}
+
 
 //Favoritar pokemons
 const handleFavorites = (event) => {
+ 
+  event.preventDefault()
   let id = event.target.parentNode.id;
 
   const pokemonIndex = favorites.findIndex((element) => element.id == id);
+  const pokemonsArrayIndex = pokemoms.findIndex((element) => element.id == id);
   const findFivorites = pokemoms.find((element) => element.id == id);
+   
 
   if (!favorites.includes(findFivorites)) {
     favorites.push(findFivorites);
-    icon = `<span class="material-symbols-outlined favorited">delete</span>`;
+    icon = `delete`;
     const calcTotalPoints = favorites.reduce(
       (sum, element) => (sum += element.points),
       0
     );
-    findFivorites.checked = true
-    
+    pokemoms[pokemonsArrayIndex].checked = true
     totalPoints = calcTotalPoints;
     renderFavorites();
+    makeCard(pokemoms, ol)
+    cestaFavorites. innerHTML = 
+    `<span>Total pokemoms in Favorites: ${favorites.length}</span>`
+    
   } else if (favorites.includes(findFivorites)) {
     favorites.splice(pokemonIndex, 1);
     const calcTotalPoints = favorites.reduce(
       (sum, element) => (sum += element.points),
       0
     );
+    pokemoms[pokemonsArrayIndex].checked = false
     totalPoints = calcTotalPoints;
     renderFavorites();
+    makeCard(pokemoms, ol)
+    cestaFavorites. innerHTML = `
+    <span> Total pokemoms in Favorites: ${favorites.length}</span>`
   }
 
   console.log(favorites)
@@ -125,17 +126,15 @@ const getApi = async () => {
     const respJson = await response.json();
     pokemoms.push(respJson);
   }
-
-  pokemoms = mapArray(pokemoms);
-  console.log(pokemoms)
-  renderPokemons(pokemoms);
+  
+    
 };
 
 const mapArray = (array) => {
   return array.map((element) => {
     return {
       name: element.name,
-      image: element.sprites["front_default"],
+      image: element.sprites.other.home["front_default"],
       type: element.types.map((type) => type.type.name).join(", "),
       id: element.id,
       points: element.base_experience,
@@ -147,6 +146,14 @@ const mapArray = (array) => {
 
 const getResponse = async () => {
   await getApi();
+  pokemoms = mapArray(pokemoms);
+    for (const pokemom of pokemoms) {
+    pokemom.checked = false
+    
+  }  
+  makeCard(pokemoms, ol);
+  listenerInput(pokemoms)
+  
 };
 
 getResponse();

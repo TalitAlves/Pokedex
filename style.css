@@ -1,5 +1,5 @@
 body {
-    background-color: orangered;
+    background-color: rgb(155, 21, 167);
     margin: 0;
     font-family: rubik;
     color: white;
@@ -18,6 +18,11 @@ body {
 
   h3{
     margin-bottom: 5px;
+  }
+
+  h4{
+    text-align: right;
+    margin: 0;
   }
 
   .tached{
@@ -47,7 +52,8 @@ body {
     color: #222;
     text-align: center;
     border-radius: 5px;
-    padding: 5px
+    padding: 5px;
+    
   }
 
   .card-title {
@@ -57,6 +63,8 @@ body {
     margin-bottom: 0;
     font-weight: 900;
   }
+
+ 
 
   .favorite{
     position: relative;
@@ -105,8 +113,13 @@ body {
   .bold-subtitle{
     font-weight: 900;
   }
+
+ 
   .card-image {
     height: 180px;
+    padding: 0;
+    margin: 0;
+   
   }
 
   #pokedex {
@@ -114,6 +127,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-gap: 20px;
+   
   }
   .card:hover {
     animation: bounce 0.5s linear;
@@ -141,29 +155,41 @@ body {
 
   .grass{
     border: 2px green solid;
+    background-color: rgba(0, 128, 0, 0.2);
    
   }
 
   .ground{
     border: 2px solid rgb(141, 131, 131);
+    background-color: rgba(141, 131, 131, 0.2);
+    
   }
   
   .water, .ice{
     border:2px solid rgb(23, 181, 202);
+    background-color: rgba(23, 181, 202, 0.2);
+
   
   }
   .fire{
     border: 2px solid rgb(255, 0, 0);
+    background-color: rgba(255, 0, 0, 0.2);
+    
+
   
   }
 
   .bug {
     border: 2px solid rgb(140, 0, 255);
+    background-color: rgba(140, 0, 255, 0.2);
+
    
   }
 
   .fighting  {
     border: 2px solid rgb(226, 205, 15);
+    background-color: rgb(226, 205, 15,  0.2);
+
   }
 
   .poison  {
@@ -173,25 +199,38 @@ body {
 
   .electric   {
     border: 2px solid rgb(114, 97, 19);
+    background-color: rgb(114, 97, 19,  0.2);
+
     
   }
 
   .normal{
     border: 2px solid rgb(75, 57, 10);
+    background-color: rgb(75, 57, 10,  0.2);
+
   }
   .fairy{
     border: 2px solid rgb(165, 21, 158);
+    background-color: rgb(165, 21, 158,  0.2);
+
   }
 
   .rock{
     border: 2px solid rgb(114, 10, 10);
+    background-color: rgb(114, 10, 10,  0.2);
+
   }
 
   .psychic{
     border: 2px solid rgb(23, 55, 124);
+    background-color: rgb(23, 55, 124,  0.2);
+
+  
   }
 
   .dragon{
     border: 2px solid rgb(124, 14, 87);
+    background-color: rgb(124, 14, 87,  0.2);
+
   }
 
