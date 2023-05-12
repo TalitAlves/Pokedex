@@ -7,6 +7,7 @@ body {
   .container {
     padding: 40px;
     margin: 0 auto;
+    text-align: center;
   }
   h1 {
     text-transform: uppercase;
@@ -15,17 +16,31 @@ body {
   }
   .card {
     list-style: none;
-    padding: 40px;
+    padding: 20px;
     background-color: #f4f4f4;
     color: #222;
     text-align: center;
+    border-radius: 5px;
   }
   .card-title {
     text-transform: uppercase;
-    font-size: 32px;
+    font-size: 20px;
     font-weight: normal;
     margin-bottom: 0;
+    font-weight: 900;
   }
+
+  .favorite{
+    position: relative;
+    right: -75px;
+    top: -26px;
+    color: rgba(0, 0, 255, 0.966);
+    }
+
+    .favorite:hover{
+      cursor: pointer;
+    }
+
   .card-subtitle {
     font-weight: lighter;
     color: #666;
@@ -35,13 +50,24 @@ body {
     justify-content: center;
     
   }
+
+  .subtitle{
+    padding-bottom: 5px;
+    border-bottom: 1px solid gray;
+    
+  }
+
+  .bold-subtitle{
+    font-weight: 900;
+  }
   .card-image {
     height: 180px;
   }
+
   #pokedex {
     padding-inline-start: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     grid-gap: 20px;
   }
   .card:hover {
