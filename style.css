@@ -13,6 +13,31 @@ body {
     text-transform: uppercase;
     text-align: center;
     font-size: 54px;
+    margin-bottom: 20px;
+  }
+
+  h3{
+    margin-bottom: 5px;
+  }
+
+  .tached{
+    text-decoration:underline
+  }
+
+  .anchorLink{
+    text-decoration: none;
+    color: white;
+    text-align: right;
+   
+  }
+
+  input{
+    padding: 10px;
+  }
+
+  #searchBtn{
+    
+    border: #f4f4f4 2px solid;
   }
   .card {
     list-style: none;
@@ -32,12 +57,27 @@ body {
 
   .favorite{
     position: relative;
+    right: -60px;
+    top: -25px;
+    color:#3B9AF7;
+  }
+
+  .cp{
+    position: relative;
+    top: 0px;
+    right: 0px;
+  }
+
+  .favorited{
+    position: relative;
     right: -75px;
     top: -26px;
-    color:#3B9AF7;
-    }
+    color:#c01212;
+    font-weight: 700;
+    font-size: 30;
+  }
 
-    .favorite:hover{
+    .favorite:hover, .favorited:hover{
       cursor: pointer;
     }
 

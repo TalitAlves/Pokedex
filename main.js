@@ -4,45 +4,55 @@ const searchButton = document.querySelector("#searchBtn");
 const section = document.querySelector(".favorites-section");
 const sectionTitle = document.querySelector(".section-title");
 
-
 // render pokemons
 let pokemoms = [];
 const favorites = [];
+let totalPoints = 0
+let icon  
 
-const renderPokemons = (array) => {
-  ol.innerHTML = "";
 
-  array.forEach((element) => {
-    ol.innerHTML += `
+const makeCard = (array, html) =>{
+    array.forEach((element) => {
+    html.innerHTML += `
     <li class= "card">
-    <div class="card-title">${element.name} </div>
-    <div class="btn-favorite"><span class="material-symbols-outlined favorite" id="${element.id}">
-    star
-    </span></div>
+    <div class="card-title favoriteIcon" id="${element.id}">
+    <div class="cp">CP ${element.points}</div>
+     ${icon} 
+    </div>
+  
     <img class="card-image" src="${element.image}">
+    <div class="card-title">${element.name} </div>
+    
     <div class="card-subtitle">
         <div class="subtitle"><span class="bold-subtitle">Tipo</span>: ${element.type}</div>
-        <div class="subtitle"><span class="bold-subtitle">Points</span>: ${element.puntos}</div>
-    </div>
+     </div>
     <div class="card-subtitle">
         <div class="subtitle"><span class="bold-subtitle">Move</span>: ${element.move} </div>
      </div>
     
     </li>
-
     
     `;
+  
+    
   });
 
-  const favoritesBtn = document.querySelectorAll(".favorite");
-
+  const favoritesBtn = document.querySelectorAll(".favoriteIcon")
   for (const button of favoritesBtn) {
     button.addEventListener("click", handleFavorites);
-  }
+
+} }
+
+const renderPokemons = () => {
+  ol.innerHTML = "";
+  icon = `<span class="material-symbols-outlined favorite">star</span>`
+ makeCard(pokemoms, ol)
+
+
 };
 
-//Search pokemons
 
+//Search pokemons
 const handleSearch = (event) => {
   event.preventDefault();
   let value = searchInput.value.toUpperCase();
@@ -52,49 +62,51 @@ const handleSearch = (event) => {
     (element) => element.name.toUpperCase() == value
   );
   searchPokemon.push(findPokemon);
-  renderPokemons(searchPokemon);
+  makeCard(searchPokemon);
 };
 
 searchButton.addEventListener("click", handleSearch);
 
+
+
 //Favoritar pokemons
 const handleFavorites = (event) => {
-  let id = event.target.id;
-
+  let id = event.target.parentNode.id
+  
+  const pokemonIndex = favorites.findIndex((element) => element.id == id)
   const findFivorites = pokemoms.find((element) => element.id == id);
+  
 
   if (!favorites.includes(findFivorites)) {
     favorites.push(findFivorites);
+    icon =`<span class="material-symbols-outlined favorited">delete</span>`
+    const calcTotalPoints = favorites.reduce((sum, element) => (sum += element.points), 0)
+    totalPoints = calcTotalPoints
+    renderFavorites();
+     
+  }  else if(favorites.includes(findFivorites)){
+    favorites.splice(pokemonIndex, 1)
+    const calcTotalPoints = favorites.reduce((sum, element) => (sum += element.points), 0)
+    totalPoints = calcTotalPoints
+    renderFavorites();
   }
-  renderFavotites(favorites)
+ 
+ 
 };
 
-const renderFavotites = (array) =>{
-  sectionTitle.innerHTML = `<h1>Favorites</h1>`
-  
-  array.forEach((element) => {
-    section.innerHTML += `
-    <li class= "card">
-    <div class="card-title">${element.name} </div>
-    <div class="btn-favorite"><span class="material-symbols-outlined favorite" id="${element.id}">
-    star
-    </span></div>
-    <img class="card-image" src="${element.image}">
-    <div class="card-subtitle">
-        <div class="subtitle"><span class="bold-subtitle">Tipo</span>: ${element.type}</div>
-        <div class="subtitle"><span class="bold-subtitle">Points</span>: ${element.puntos}</div>
-    </div>
-    <div class="card-subtitle">
-        <div class="subtitle"><span class="bold-subtitle">Move</span>: ${element.move} </div>
-     </div>
-    
-    </li>
+const renderFavorites = () => {
+ sectionTitle.innerHTML = `
+  <h1>Favorites</h1>
+  <a href="#top-page" class="anchorLink"><h3>Go to <span class="tached">Search</span></h3></a>
+  <h2>Total Combat Power of your favorite pokemons: ${totalPoints} </h2>
+  `;
 
-    
-    `;
-  });
+  section.innerHTML = "";
+  makeCard(favorites, section)
 
-}
+  }
+
+
 
 //Get Api
 const getApi = async () => {
@@ -103,8 +115,9 @@ const getApi = async () => {
     const response = await fetch(url);
     const respJson = await response.json();
     pokemoms.push(respJson);
+    
   }
-
+  console.log(pokemoms)
   pokemoms = mapArray(pokemoms);
   console.log(pokemoms);
   renderPokemons(pokemoms);
@@ -117,7 +130,7 @@ const mapArray = (array) => {
       image: element.sprites["front_default"],
       type: element.types.map((type) => type.type.name).join(", "),
       id: element.id,
-      puntos: element.base_experience,
+      points: element.base_experience,
       type: element.types[0].type.name,
       move: element.moves[0].move.name,
     };
