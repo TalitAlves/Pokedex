@@ -3,15 +3,12 @@ const searchInput = document.querySelector("#searchInput");
 const searchButton = document.querySelector("#searchBtn");
 const section = document.querySelector(".favorites-section");
 const sectionTitle = document.querySelector(".section-title");
-const cestaFavorites = document.querySelector("h4")
-
+const cestaFavorites = document.querySelector("h4");
 
 // render pokemons
 let pokemoms = [];
-const favorites = [];
+let favorites = [];
 let totalPoints = 0;
-let icon;
-
 
 const makeCard = (array, html) => {
   html.innerHTML = "";
@@ -22,89 +19,85 @@ const makeCard = (array, html) => {
     <div class="${element.type} borderStyle">
     <div class="card-title favoriteIcon" id="${element.id}">
     <div class="cp"># ${element.points}</div>
-    <span class="material-symbols-outlined favorite">${element.checked ? "verified" : "favorite"}</span>
+    <span class="material-symbols-outlined favorite">${
+      element.checked ? "verified" : "favorite"
+    }</span>
     </div>
   
     <img class="card-image" src="${element.image}">
     <div class="card-title">${element.name} </div>
     
     <div class="card-subtitle">
-        <div class="subtitle"><span class="bold-subtitle">Tipo</span>: ${element.type}</div>
+        <div class="subtitle"><span class="bold-subtitle">Type</span>: ${
+          element.type
+        }</div>
      </div>
     <div class="card-subtitle">
-        <div class="subtitle"><span class="bold-subtitle">Move</span>: ${element.move} </div>
+        <div class="subtitle"><span class="bold-subtitle">Move</span>: ${
+          element.move
+        } </div>
      </div>
      </div>
     </li>
     
     `;
-
-    
   });
 
   const favoritesBtn = document.querySelectorAll(".favoriteIcon");
   for (const button of favoritesBtn) {
     button.addEventListener("click", handleFavorites);
   }
-
 };
 
-
 //Search pokemons
-const handleSearch = ((pokemoms, value) =>{
-  const filterPokemoms = pokemoms.filter((pokemoms)=>{
-    return pokemoms.name.toUpperCase().includes(value.toUpperCase())
-  })
-  makeCard(filterPokemoms, ol)
-})
+const handleSearch = (pokemoms, value) => {
+  const filterPokemoms = pokemoms.filter((pokemoms) => {
+    return pokemoms.name.toUpperCase().includes(value.toUpperCase());
+  });
+  makeCard(filterPokemoms, ol);
+};
 
-
-const listenerInput = (pokemoms) =>{
-  searchInput.addEventListener("input", () => handleSearch(pokemoms, searchInput.value));
-  
-}
-
+const listenerInput = (pokemoms) => {
+  searchInput.addEventListener("input", () =>
+    handleSearch(pokemoms, searchInput.value)
+  );
+};
 
 //Favoritar pokemons
 const handleFavorites = (event) => {
- 
-  event.preventDefault()
+  event.preventDefault();
   let id = event.target.parentNode.id;
 
   const pokemonIndex = favorites.findIndex((element) => element.id == id);
   const pokemonsArrayIndex = pokemoms.findIndex((element) => element.id == id);
-  const findFivorites = pokemoms.find((element) => element.id == id);
-   
+  const favoritePokemom = pokemoms.find((element) => element.id == id);
 
-  if (!favorites.includes(findFivorites)) {
-    favorites.push(findFivorites);
-    icon = `delete`;
+  if (!favorites.includes(favoritePokemom)) {
+    favorites.push(favoritePokemom);
     const calcTotalPoints = favorites.reduce(
       (sum, element) => (sum += element.points),
       0
     );
-    pokemoms[pokemonsArrayIndex].checked = true
+    pokemoms[pokemonsArrayIndex].checked = true;
     totalPoints = calcTotalPoints;
     renderFavorites();
-    makeCard(pokemoms, ol)
-    cestaFavorites. innerHTML = 
-    `<span>Total pokemoms in Favorites: ${favorites.length}</span>`
-    
-  } else if (favorites.includes(findFivorites)) {
+    makeCard(pokemoms, ol);
+    cestaFavorites.innerHTML = `<span>Total pokemoms in Favorites: ${favorites.length}</span>`;
+  } else if (favorites.includes(favoritePokemom)) {
     favorites.splice(pokemonIndex, 1);
     const calcTotalPoints = favorites.reduce(
       (sum, element) => (sum += element.points),
       0
     );
-    pokemoms[pokemonsArrayIndex].checked = false
+    pokemoms[pokemonsArrayIndex].checked = false;
     totalPoints = calcTotalPoints;
     renderFavorites();
-    makeCard(pokemoms, ol)
-    cestaFavorites. innerHTML = `
-    <span> Total pokemoms in Favorites: ${favorites.length}</span>`
+    makeCard(pokemoms, ol);
+    cestaFavorites.innerHTML = `
+    <span> Total pokemoms in Favorites: ${favorites.length}</span>`;
   }
 
-  console.log(favorites)
+  localStorage.setItem("favorites", JSON.stringify(favorites));
 };
 
 const renderFavorites = () => {
@@ -120,15 +113,16 @@ const renderFavorites = () => {
 
 //Get Api
 const getApi = async () => {
-  for (let i = 1; i <= 50; i++) {
+  const getLocalStorage = JSON.parse(localStorage.getItem("favorites"));
+  
+  for (let i = 1; i <= 5; i++) {
     const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
     const response = await fetch(url);
     const respJson = await response.json();
-    pokemoms.push(respJson);
-  }
-  
+    pokemoms.push(respJson)
+
     
-};
+}}
 
 const mapArray = (array) => {
   return array.map((element) => {
@@ -145,25 +139,31 @@ const mapArray = (array) => {
 };
 
 const getResponse = async () => {
+  const getLocalStorage = JSON.parse(localStorage.getItem("favorites"));
   await getApi();
+
+  if (getLocalStorage) {
+    favorites = getLocalStorage;
+    renderFavorites()
+}
+
   pokemoms = mapArray(pokemoms);
-    for (const pokemom of pokemoms) {
-    pokemom.checked = false
-    
-  }  
   makeCard(pokemoms, ol);
-  listenerInput(pokemoms)
+  listenerInput(pokemoms);
+  
+  for (const pokemom of pokemoms) {
+    pokemom.checked = false;
+  }
   
 };
 
 getResponse();
 
-/* printar los 150 primeiros porkemons
-2. criar el formulario para hacer la busqueda
-3. selecionar los inputs
-4. crear un evento para quando se ponga el nombre
-5. verificar se el nombre esta en el array de pokemons
-  usando un find dentro del array de pokemons, buscar por el name
-6. se es verdadeiro = renderizar la pagina solo con el pokemon buscado
-  
-*/
+/**
+ * se tem algo em local storage
+ * repetir em ol, os cartao que estao em favoritos
+ * imprimir em ol dos 150 cartaos os que nao estao em favoritos
+ * chegar se dos 150, algum esta me local storage
+ * 
+ * 
+ */
