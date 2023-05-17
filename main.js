@@ -113,8 +113,7 @@ const renderFavorites = () => {
 
 //Get Api
 const getApi = async () => {
-  const getLocalStorage = JSON.parse(localStorage.getItem("favorites"));
-  
+   
   for (let i = 1; i <= 5; i++) {
     const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
     const response = await fetch(url);
@@ -138,22 +137,25 @@ const mapArray = (array) => {
   });
 };
 
+
 const getResponse = async () => {
   const getLocalStorage = JSON.parse(localStorage.getItem("favorites"));
   await getApi();
-
+  pokemoms = mapArray(pokemoms);
+  
+  
   if (getLocalStorage) {
     favorites = getLocalStorage;
-    renderFavorites()
-}
+    renderFavorites() 
+   }
 
-  pokemoms = mapArray(pokemoms);
-  makeCard(pokemoms, ol);
-  listenerInput(pokemoms);
-  
-  for (const pokemom of pokemoms) {
-    pokemom.checked = false;
+   for (const pokemom of pokemoms) {
+        pokemom.checked = favorites.some(favorite => favorite.name === pokemom.name) ? true : false;;
   }
+
+  makeCard(pokemoms, ol)
+  listenerInput(pokemoms);
+
   
 };
 
@@ -164,6 +166,6 @@ getResponse();
  * repetir em ol, os cartao que estao em favoritos
  * imprimir em ol dos 150 cartaos os que nao estao em favoritos
  * chegar se dos 150, algum esta me local storage
- * 
+ * False se los pokemons estan n favoritos
  * 
  */
