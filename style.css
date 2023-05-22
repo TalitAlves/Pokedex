@@ -33,6 +33,24 @@ body {
     margin: 0;
   }
 
+  ul{
+    display: flex;
+    max-height: 100px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .catch-list{
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 20px 40px;
+
+  }
+.pokebola{
+    max-width: 50px;
+  }
+
   .tached{
     text-decoration:underline
   }
@@ -124,7 +142,7 @@ body {
 
  
   .card-image {
-    height: 180px;
+    height: 130px;
     padding: 0;
     margin: 0;
    

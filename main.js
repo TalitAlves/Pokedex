@@ -121,7 +121,7 @@ const renderFavorites = () => {
 //Get Api
 const getApi = async () => {
    
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 150; i++) {
     const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
     const response = await fetch(url);
     const respJson = await response.json();
@@ -169,11 +169,3 @@ const getResponse = async () => {
 
 getResponse();
 
-/**
- * se tem algo em local storage
- * repetir em ol, os cartao que estao em favoritos
- * imprimir em ol dos 150 cartaos os que nao estao em favoritos
- * chegar se dos 150, algum esta me local storage
- * False se los pokemons estan n favoritos
- * 
- */
