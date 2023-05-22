@@ -7,8 +7,9 @@ const cestaFavorites = document.querySelector("h4");
 
 // render pokemons
 let pokemoms = [];
-let favorites = [];
+let favorites = []
 let totalPoints = 0;
+
 
 const makeCard = (array, html) => {
   html.innerHTML = "";
@@ -49,6 +50,19 @@ const makeCard = (array, html) => {
   }
 };
 
+
+const checkLocalStorage = () =>{
+  if(localStorage.length>0){
+     favorites =  JSON.parse(localStorage.getItem("favorites"))
+    
+  } else{
+  favorites = []
+  console.log( favorites)
+  }
+}
+
+checkLocalStorage()
+
 //Search pokemons
 const handleSearch = (pokemoms, value) => {
   const filterPokemoms = pokemoms.filter((pokemoms) => {
@@ -65,39 +79,32 @@ const listenerInput = (pokemoms) => {
 
 //Favoritar pokemons
 const handleFavorites = (event) => {
-  event.preventDefault();
-  let id = event.target.parentNode.id;
+
+event.preventDefault();
+let id = event.target.parentNode.id;
 
   const pokemonIndex = favorites.findIndex((element) => element.id == id);
   const pokemonsArrayIndex = pokemoms.findIndex((element) => element.id == id);
   const favoritePokemom = pokemoms.find((element) => element.id == id);
 
-  if (!favorites.includes(favoritePokemom)) {
+  if (pokemonIndex===-1) {
+    console.log("push")
     favorites.push(favoritePokemom);
-    const calcTotalPoints = favorites.reduce(
-      (sum, element) => (sum += element.points),
-      0
-    );
     pokemoms[pokemonsArrayIndex].checked = true;
-    totalPoints = calcTotalPoints;
-    renderFavorites();
-    makeCard(pokemoms, ol);
-    cestaFavorites.innerHTML = `<span>Total pokemoms in Favorites: ${favorites.length}</span>`;
-  } else if (favorites.includes(favoritePokemom)) {
-    favorites.splice(pokemonIndex, 1);
-    const calcTotalPoints = favorites.reduce(
-      (sum, element) => (sum += element.points),
-      0
-    );
+    
+  } else {
+    console.log("splice")
+    favorites.splice(pokemonIndex, 1); 
     pokemoms[pokemonsArrayIndex].checked = false;
-    totalPoints = calcTotalPoints;
-    renderFavorites();
-    makeCard(pokemoms, ol);
-    cestaFavorites.innerHTML = `
-    <span> Total pokemoms in Favorites: ${favorites.length}</span>`;
   }
-
+  const calcTotalPoints = favorites.reduce((sum, element) => (sum += element.points), 0);
+  totalPoints = calcTotalPoints;
+  renderFavorites();
+  makeCard(pokemoms, ol);
+  cestaFavorites.innerHTML = `<span>Total pokemoms in Favorites: ${favorites.length}</span>`;
   localStorage.setItem("favorites", JSON.stringify(favorites));
+  
+  
 };
 
 const renderFavorites = () => {
@@ -139,6 +146,7 @@ const mapArray = (array) => {
 
 
 const getResponse = async () => {
+
   const getLocalStorage = JSON.parse(localStorage.getItem("favorites"));
   await getApi();
   pokemoms = mapArray(pokemoms);
