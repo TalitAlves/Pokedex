@@ -120,14 +120,23 @@ const renderFavorites = () => {
 
 //Get Api
 const getApi = async () => {
+  const loadingElement = document.createElement('div');
+  loadingElement.classList.add("loading")
+  loadingElement.innerText = 'Loading...';
+  document.body.appendChild(loadingElement);
    
+  try {
   for (let i = 1; i <= 150; i++) {
     const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
     const response = await fetch(url);
     const respJson = await response.json();
     pokemoms.push(respJson)
+  }   
+  } catch (error) {
+    console.error('Error fetching API:', error);
+  } finally {
+    document.body.removeChild(loadingElement);
 
-    
 }}
 
 const mapArray = (array) => {
